@@ -3,11 +3,11 @@
   <head>
     <meta charset="utf-8">
     <meta name="description"
-      content="summary">
+      content="Does asking for help mitigate goal misgeneralization? We study whether deferring to an expert can prevent RL agents from pursuing incorrect proxy goals under distribution shift.">
     <meta name="keywords"
-      content="kw1, kw2, kw3">
+      content="goal misgeneralization, reinforcement learning, asking for help, expert deferral, OOD detection, AI safety">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Getting by Goal Misgeneralization with a Little Help From an Expert</title>
+    <title>Does Asking for Help Mitigate Goal Misgeneralization?</title>
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async
@@ -73,7 +73,7 @@
         <div class="container is-max-desktop">
           <div class="columns is-centered">
             <div class="column has-text-centered">
-              <h1 class="title is-1 publication-title">Getting by Goal Misgeneralization with a Little Help From an Expert</h1>
+              <h1 class="title is-1 publication-title">Does Asking for Help Mitigate Goal Misgeneralization?</h1>
 
               <div class="column has-text-centered">
                 <div class="publication-links">
@@ -94,7 +94,7 @@
                       <span class="icon">
                         <i class="fab fa-github"></i>
                       </span>
-                      <span>Code(tbd)</span>
+                      <span>Anonymized Code(tbd)</span>
                     </a>
                   </span>
                 </div>
@@ -107,7 +107,7 @@
     </section>
 
     <p style="text-align: center; font-size: 24px; margin-bottom: 0px;">
-      <strong><em>summary</em></strong>
+      <strong><em>Asking an expert for help can mitigate goal misgeneralization, but largely because existing benchmarks let agents recover from pursuing the wrong goal.</em></strong>
     </p>
 
     <section class="section">
@@ -117,7 +117,17 @@
           <div class="column is-four-fifths">
             <h2 class="title is-3">Abstract</h2>
             <div class="content has-text-justified">
-              abstract
+              <p>
+                Reinforcement learning (RL) agents have achieved impressive results but can struggle to generalize, leading to unexpected and potentially unsafe behavior.
+                Prior work discovered that, under certain distribution shifts in the test environment, agents competently pursue incorrect goals, even when they behave near-optimally in the training environment.
+                This phenomenon, termed <em>goal misgeneralization</em> (GMG), occurs when RL agents find proxy goals that correlate with the intended goal during training but diverge at test time.
+                We investigate the extent to which goal misgeneralization can be mitigated by allowing agents to ask an expert for help.
+                We find that, in existing goal misgeneralization environments, simple uncertainty estimation methods and heuristics can mitigate apparent GMG failures.
+                However, this success relies on a particular property of existing benchmarks: achieving the proxy goal has no negative consequences, making delayed failure detection viable.
+                We propose modified versions of existing goal misgeneralization benchmarks that do not allow recovery.
+                We find that this drastically reduces the ability of existing query strategies to mitigate goal misgeneralization, highlighting their limitations.
+                We encourage future work to study this more challenging class of goal misgeneralization failures with stricter failure modes.
+              </p>
             </div>
           </div>
         </div>
@@ -128,16 +138,28 @@
       <div class="hero-body">
         <div class="container is-max-desktop" style="text-align: center;">
           <h3 class="title is-3">Overview</h3>
-          <!-- <div>
-            <img src="./static/images/x.png" alt="x" style="width: 100%;">
-          </div> -->
-          
-          <br><br>
+          <div>
+            <img src="./static/images/overview.png" alt="Overview of the asking-for-help framework" style="max-width: 55%;">
+          </div>
+          <div class="content has-text-justified">
+            <p>
+              We study goal misgeneralization (GMG) in an <em>asking-for-help</em> framework:
+              a frozen <em>novice</em> policy acts by default, while a <em>query strategy</em> monitors the interaction and decides when to hand control to an <em>expert</em> for the rest of the episode.
+              A useful query strategy must defer before the novice's pursuit of a proxy goal causes harm, while avoiding unnecessary queries in situations the novice handles on its own.
+            </p>
+            <p>
+              We compare six query strategies in the <span class="is-family-monospace">Coinrun</span> and <span class="is-family-monospace">Maze</span> GMG benchmarks, across a range of ask-for-help budgets (AFHP):
+              confidence scores (<span class="is-family-monospace">MaxProb</span>, <span class="is-family-monospace">MaxLogit</span>), deep ensemble disagreement (<span class="is-family-monospace">Ensemble</span>), Deep SVDD-based OOD detection on raw observations and latent features (<span class="is-family-monospace">ImageSVDD</span>, <span class="is-family-monospace">LatentSVDD</span>), and a simple episode-length timer (<span class="is-family-monospace">Heuristic</span>).
+              We then introduce <em>irrecoverable</em> variants of both environments, in which reaching the proxy goal ends the episode with zero reward, and re-evaluate all strategies.
+            </p>
+          </div>
+
+          <br>
 
           <h3 class="title is-3">Videos</h3>
           <div class="content has-text-justified">
             <p>
-              Example behavior observed in Coinrun and Maze. The videos show the down-sampled agent view at the top and the human observation at the bottom. The bar at the top shows the OOD score and turns red when the agent asks the expert for help.
+              Example behavior observed in Coinrun and Maze. The videos show the down-sampled agent view at the top and the human observation at the bottom. The bar at the top shows the deferral score and turns red when the agent asks the expert for help.
             </p>
           </div>
 
@@ -191,6 +213,48 @@
               <img src="./static/videos/maze-success-heuristic.gif" alt="Maze Success Heuristic">
               <figcaption>Maze Success Heuristic</figcaption>
             </figure>
+          </div>
+
+          <br><br>
+
+          <h3 class="title is-3">Results</h3>
+
+          <h4 class="title is-4">Asking for help can mitigate GMG in existing benchmarks</h4>
+          <div class="content has-text-justified">
+            <p>
+              We compare the test-time return of the query strategies across ask-for-help budgets (AFHP).
+              Learning-free methods are competitive: a simple episode-length heuristic performs well in both environments.
+              Successful episodes typically follow a pattern: the novice first pursues the proxy goal, the query strategy then triggers, and the expert recovers the episode by backtracking to the intended goal.
+            </p>
+          </div>
+          <div class="columns is-centered">
+            <div class="column is-half">
+              <img src="./static/images/coinrun-main-normalized.png" alt="Main results for Coinrun">
+              <p class="is-size-6 has-text-centered">Coinrun</p>
+            </div>
+            <div class="column is-half">
+              <img src="./static/images/maze-main-normalized.png" alt="Main results for Maze">
+              <p class="is-size-6 has-text-centered">Maze</p>
+            </div>
+          </div>
+
+          <h4 class="title is-4">Irrecoverable proxy pursuit exposes the limits of current query strategies</h4>
+          <div class="content has-text-justified">
+            <p>
+              The success above relies on a property of the benchmarks: pursuing the proxy goal has no irreversible consequences, so detecting failure <em>after</em> the fact is sufficient.
+              In our modified environments, where reaching the proxy goal terminates the episode with zero reward, performance drops drastically: no method beats the random baseline in Coinrun, and all methods degrade heavily in Maze.
+              Query strategies must detect the goal-relevant shift <em>before</em> the proxy goal is reached, and current methods fail to do so in time.
+            </p>
+          </div>
+          <div class="columns is-centered">
+            <div class="column is-half">
+              <img src="./static/images/coinrun-proxy-fail-normalized.png" alt="Irrecoverable variant results for Coinrun">
+              <p class="is-size-6 has-text-centered">Coinrun (irrecoverable)</p>
+            </div>
+            <div class="column is-half">
+              <img src="./static/images/maze-proxy-fail-normalized.png" alt="Irrecoverable variant results for Maze">
+              <p class="is-size-6 has-text-centered">Maze (irrecoverable)</p>
+            </div>
           </div>
         </div>
       </div>
