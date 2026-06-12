@@ -145,8 +145,8 @@
           </div>
           <div class="content has-text-justified">
             <p>
-              We study goal misgeneralization (GMG) in an <em>asking-for-help</em> framework:
-              a frozen <em>novice</em> policy acts by default, while a <em>query strategy</em> monitors the interaction and decides when to hand control to an <em>expert</em> for the rest of the episode.
+              We study goal misgeneralization (GMG) in an <em>asking-for-help</em> framework.
+              A frozen <em>novice</em> policy acts by default, while a <em>query strategy</em> monitors the interaction and decides when to hand control to an <em>expert</em> for the rest of the episode.
               A useful query strategy must defer before the novice's pursuit of a proxy goal causes harm, while avoiding unnecessary queries in situations the novice handles on its own.
             </p>
             <p>
@@ -225,8 +225,7 @@
           <div class="content has-text-justified">
             <p>
               We compare the test-time return of the query strategies across ask-for-help budgets (AFHP).
-              Learning-free methods are competitive: a simple episode-length heuristic performs well in both environments.
-              Successful episodes typically follow a pattern: the novice first pursues the proxy goal, the query strategy then triggers, and the expert recovers the episode by backtracking to the intended goal.
+              A simple episode-length heuristic performs well in both environments, suggesting that learning-free methods are competitive.
             </p>
           </div>
           <div class="columns is-centered">
@@ -243,8 +242,10 @@
           <h4 class="title is-4">Irrecoverable proxy pursuit exposes the limits of current query strategies</h4>
           <div class="content has-text-justified">
             <p>
-              The success above relies on a property of the benchmarks: pursuing the proxy goal has no irreversible consequences, so detecting failure <em>after</em> the fact is sufficient.
-              In our modified environments, where reaching the proxy goal terminates the episode with zero reward, performance drops drastically: no method beats the random baseline in Coinrun, and all methods degrade heavily in Maze.
+              The success above relies on the fact that pursuing the proxy goal has no irreversible consequences in commonly-used benchmarks.
+              Thus, detecting failure <em>after</em> the fact is sufficient.
+              In our modified environments, where reaching the proxy goal terminates the episode with zero reward, performance drops drastically. 
+              We find that no method beats the random baseline in Coinrun, and all methods degrade heavily in Maze.
               Query strategies must detect the goal-relevant shift <em>before</em> the proxy goal is reached, and current methods fail to do so in time.
             </p>
           </div>
