@@ -124,8 +124,7 @@
                 Prior work discovered that, under certain distribution shifts in the test environment, agents competently pursue incorrect goals, even when they behave near-optimally in the training environment.
                 This phenomenon, termed <em>goal misgeneralization</em> (GMG), occurs when RL agents find proxy goals that correlate with the intended goal during training but diverge at test time.
                 We investigate the extent to which goal misgeneralization can be mitigated by allowing agents to ask an expert for help.
-                We find that, in existing goal misgeneralization environments, simple uncertainty estimation methods and heuristics can mitigate apparent GMG failures.
-                However, this success relies on a particular property of existing benchmarks: achieving the proxy goal has no negative consequences, making delayed failure detection viable.
+                We find that, in existing goal misgeneralization environments, simple uncertainty estimation methods and heuristics can mitigate apparent GMG failures. However, this success relies on a particular property of existing benchmarks: achieving the proxy goal has no negative consequences, making delayed failure detection viable.
                 We propose modified versions of existing goal misgeneralization benchmarks that do not allow recovery.
                 We find that this drastically reduces the ability of existing query strategies to mitigate goal misgeneralization, highlighting their limitations.
                 We encourage future work to study this more challenging class of goal misgeneralization failures with stricter failure modes.
